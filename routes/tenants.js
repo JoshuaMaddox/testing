@@ -26,11 +26,10 @@ router.route('/')
     })
     .delete((req, res) => {
       Tenant.findByIdAndRemove(req.params.id)
-        .then(tenant => tenant.save())
-        .then(
-          Tenant.find()
-          .then(tenants => res.send(tenants))
-        )
+        .then(() => Tenant.find())
+        .then(tenants => {
+          res.send(tenants)
+        })
         .catch(err => res.status(400).send(err))
   })
     

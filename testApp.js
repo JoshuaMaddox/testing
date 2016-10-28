@@ -7,12 +7,8 @@
 const path = require('path')
 const morgan = require('morgan')
 const express = require('express')
-const webpack = require('webpack')
 const mongoose = require('mongoose')
 const bodyParser = require('body-parser')
-const webpackConfig = require('./webpack.config')
-const webpackDevMiddleware = require('webpack-dev-middleware')
-const webpackHotMiddleware = require('webpack-hot-middleware')
 
 //MONGOOSE CONFIG
 const config = require('./config')
@@ -33,14 +29,6 @@ app.use(morgan('dev'))
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(express.static('build'))
-
-//WEBPACK
-const compiler = webpack(webpackConfig)
-app.use(webpackDevMiddleware(compiler, {
-  publicPath: webpackConfig.output.publicPath, 
-  noInfo: true
-}))
-app.use(webpackHotMiddleware(compiler))
 
 // ROUTES
 app.use('/api', require('./routes/api'))
