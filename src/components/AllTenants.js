@@ -4,6 +4,7 @@ import ToAPIActions from '../actions/ToAPIActions'
 import ServerActions from '../actions/ServerActions'
 import TenantsStore from '../stores/TenantsStore'
 import Navbar from './Navbar'
+import Clipboard from 'clipboard'
 
 export default class Tenent extends Component {
   constructor() {
@@ -15,6 +16,7 @@ export default class Tenent extends Component {
     this.returnHome = this.returnHome.bind(this)
     this.editTenant = this.editTenant.bind(this)
     this.deleteTenant = this.deleteTenant.bind(this)
+    this.copyMe = this.copyMe.bind(this)
   }
 
   componentWillMount() {
@@ -46,14 +48,21 @@ export default class Tenent extends Component {
     ToAPIActions.deleteTenant(tenantId)
   }
 
+  copyMe(e){
+    let btns = document.querySelectorAll('button');
+    let clipboard = new Clipboard(btns);
+    browserHistory('')
+  }
+
   render() {
 
     const { allTenants } = this.state
-
+    var btns = document.querySelectorAll('button');
+    var clipboard = new Clipboard(btns);
     let tenantsShow; 
 
     if(allTenants) {
-      tenantsShow = allTenants.map((tenant) => {
+      tenantsShow = allTenants.map((tenant, i) => {
         return (
           <div className="tenantContainer" key={tenant._id}>
             <div className="nameContainer">
@@ -64,7 +73,8 @@ export default class Tenent extends Component {
             <p>{tenant.phone}</p>
             <p>{tenant.moveInDate}</p>
             <p>{tenant.moveOutDate}</p>
-            <p>{tenant._id}</p>
+            <input id={`li${i.toString()}st`} defaultValue={tenant._id}/>
+              <button onClick={this.copyMe} className="btn" data-clipboard-target={`#li${i.toString()}st`}>Copy Client Id</button>
             <div className="tenantBtns">
               <button id={tenant._id} onClick={this.editTenant} className='tenantBtn'>Edit</button>
               <button id={tenant._id} onClick={this.deleteTenant} className='tenantBtn'>Delete</button>
